@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "185360620575",
+    "project_id": "stream24-news",
+    "storage_bucket": "stream24-news.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185360620575:android:7ddbf4b2b8a05ae72e092a",
+        "android_client_info": {
+          "package_name": "com.legendarysoftware.stream24news"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185360620575-3hvmrsteiif3qu31qfr3f18gffe5sgjl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.legendarysoftware.stream24news",
+            "certificate_hash": "97561758717b5bbd5ebb6df3c4ee75a277894c5b"
+          }
+        },
+        {
+          "client_id": "185360620575-7h6v0o2e3p4s9ebd9tkdeck53lh14r03.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW1DxP3QOyZD-4psm4bfUtknYEksbhb9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185360620575-7h6v0o2e3p4s9ebd9tkdeck53lh14r03.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "185360620575-3ig1h9jd6r7st86ns8p2n1pc6lobta2s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.legendarysoftware.stream24news"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
