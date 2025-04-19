@@ -38,19 +38,16 @@
   <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = '{{flutter_service_worker_version}}';
-    
-    // Explicitly set the renderer to HTML
-    window.flutterWebRenderer = "html";
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
   
   <style>
     body {
+      background-color: #0B1437;
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background-color: #0B1437;
     }
     
     .loading {
@@ -83,41 +80,52 @@
       text-align: center;
       padding: 20px;
       display: none;
+      font-family: Arial, sans-serif;
     }
   </style>
 </head>
 <body>
-  <!-- Loading indicator -->
-  <div class="loading">
+  <div class="loading" id="loading">
     <div class="loader"></div>
   </div>
   <div id="error-message"></div>
 
   <script>
     window.addEventListener('load', function() {
-      const loadingElement = document.querySelector('.loading');
-      const errorElement = document.getElementById('error-message');
+      var loading = document.querySelector('#loading');
+      var errorMessage = document.querySelector('#error-message');
 
-      _flutter.loader.load({
+      // Initialize service worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('flutter-first-frame', function () {
+          navigator.serviceWorker.register('flutter_service_worker.js');
+        });
+      }
+
+      function displayError(message) {
+        if (loading) loading.style.display = 'none';
+        if (errorMessage) {
+          errorMessage.style.display = 'block';
+          errorMessage.textContent = message;
+        }
+        console.error(message);
+      }
+
+      _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            loadingElement.style.display = 'none';
-            appRunner.runApp();
-          }).catch(function(error) {
-            console.error('Error initializing Flutter:', error);
-            loadingElement.style.display = 'none';
-            errorElement.style.display = 'block';
-            errorElement.textContent = 'Error loading application. Please refresh the page.';
-          });
+        onEntrypointLoaded: async function(engineInitializer) {
+          try {
+            const appRunner = await engineInitializer.initializeEngine();
+            await appRunner.runApp();
+            if (loading) loading.style.display = 'none';
+          } catch (e) {
+            displayError('Error initializing Flutter app: ' + e);
+          }
         }
-      }).catch(function(error) {
-        console.error('Error loading Flutter:', error);
-        loadingElement.style.display = 'none';
-        errorElement.style.display = 'block';
-        errorElement.textContent = 'Error loading application. Please refresh the page.';
+      }).catch(function(err) {
+        displayError('Failed to load Flutter engine: ' + err);
       });
     });
   </script>
