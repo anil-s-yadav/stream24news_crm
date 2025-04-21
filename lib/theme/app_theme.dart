@@ -10,7 +10,7 @@ class AppTheme {
 
   static ThemeData darkTheme() {
     return ThemeData.dark().copyWith(
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: _primaryColor,
         secondary: Colors.white,
         surface: _surfaceColor,
@@ -25,12 +25,12 @@ class AppTheme {
       dividerColor: Colors.white.withOpacity(0.05),
       textTheme:
           GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
-        titleLarge: TextStyle(
+        titleLarge: const TextStyle(
           color: Colors.white,
           fontSize: 24,
           fontWeight: FontWeight.w600,
         ),
-        titleMedium: TextStyle(
+        titleMedium: const TextStyle(
           color: Colors.white,
           fontSize: 16,
           fontWeight: FontWeight.w500,
@@ -44,7 +44,7 @@ class AppTheme {
           fontSize: 13,
         ),
       ),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: _surfaceColor,
         elevation: 0,
       ),
@@ -61,7 +61,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: _primaryColor),
+          borderSide: const BorderSide(color: _primaryColor),
         ),
         labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
         hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),

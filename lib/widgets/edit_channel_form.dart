@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class EditChannelForm extends StatefulWidget {
   final String userName;
   final String channelName;
+  final String photoUrl;
   final String description;
   final VoidCallback onClose;
 
@@ -11,6 +12,7 @@ class EditChannelForm extends StatefulWidget {
     super.key,
     required this.userName,
     required this.channelName,
+    required this.photoUrl,
     required this.description,
     required this.onClose,
   });
@@ -105,12 +107,17 @@ class _EditChannelFormState extends State<EditChannelForm> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            widget.userName,
-                            style: GoogleFonts.inter(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                          ListTile(
+                            leading: CircleAvatar(
+                              foregroundImage: NetworkImage(widget.photoUrl),
+                            ),
+                            title: Text(
+                              widget.userName,
+                              style: GoogleFonts.inter(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],

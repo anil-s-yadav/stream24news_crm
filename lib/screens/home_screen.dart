@@ -17,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _showEditForm = false;
   String? _selectedUserName;
   String? _selectedChannelName;
+  String? _selectedPhotoUrl;
   String? _selectedDescription;
 
   final List<String> _sections = [
@@ -26,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
     'News'
   ];
 
-  void _handleReportedChannelTap(
-      String userName, String channelName, String description) {
+  void _handleReportedChannelTap(String userName, String photoUrl,
+      String channelName, String description) {
     setState(() {
       _showEditForm = true;
       _selectedUserName = userName;
@@ -70,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_selectedIndex == 1 && _showEditForm && _selectedUserName != null) {
       return EditChannelForm(
         userName: _selectedUserName!,
+        photoUrl: _selectedPhotoUrl!,
         channelName: _selectedChannelName!,
         description: _selectedDescription!,
         onClose: _handleEditFormClose,

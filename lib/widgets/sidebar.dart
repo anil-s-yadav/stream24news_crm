@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stream24news_crm/screens/login_screen.dart';
 import 'package:stream24news_crm/services/auth_service.dart';
 
+import '../services/shared_preferences.dart';
+
 class Sidebar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemSelected;
@@ -178,6 +180,7 @@ class Sidebar extends StatelessWidget {
               onTap: () async {
                 // TODO: Implement logout functionality
                 await AuthService().signOut();
+                LocalStoragePref.instance?.setLoginBool(false);
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => LoginScreen()));
               },

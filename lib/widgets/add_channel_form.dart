@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class AddChannelForm extends StatefulWidget {
   const AddChannelForm({super.key});
@@ -13,6 +14,7 @@ class _AddChannelFormState extends State<AddChannelForm> {
   final _logoUrlController = TextEditingController();
   final _channelNameController = TextEditingController();
   final _channelUrlController = TextEditingController();
+  bool _isValidImageUrl = false;
   String _selectedLanguage = 'Hindi';
 
   final List<String> _languages = ['Hindi', 'English', 'Tamil', 'Telugu'];
@@ -23,6 +25,29 @@ class _AddChannelFormState extends State<AddChannelForm> {
     _channelNameController.dispose();
     _channelUrlController.dispose();
     super.dispose();
+  }
+
+  Future<bool> _validateImageUrl(String url) async {
+    try {
+      final response = await http.head(Uri.parse(url));
+      final contentType = response.headers['content-type'];
+      return contentType != null && contentType.startsWith('image/');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  void _onLogoUrlChanged(String url) async {
+    if (url.isNotEmpty) {
+      final isValid = await _validateImageUrl(url);
+      setState(() {
+        _isValidImageUrl = isValid;
+      });
+    } else {
+      setState(() {
+        _isValidImageUrl = false;
+      });
+    }
   }
 
   @override
@@ -67,25 +92,46 @@ class _AddChannelFormState extends State<AddChannelForm> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 80,
+                      height: 80,
                       decoration: BoxDecoration(
                         color: const Color(0xFF6C5DD3).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Icon(
-                        Icons.add_photo_alternate_rounded,
-                        size: 20,
-                        color: const Color(0xFF6C5DD3),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Add Logo',
-                      style: GoogleFonts.inter(
-                        color: Colors.white.withOpacity(0.7),
-                        fontSize: 12,
-                      ),
+                      child:
+                          _logoUrlController.text.isNotEmpty && _isValidImageUrl
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.network(
+                                    _logoUrlController.text,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white54,
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Center(
+                                        child: Icon(
+                                          Icons.image_not_supported,
+                                          color: Colors.white54,
+                                          size: 32,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
+                              : const Center(
+                                  child: Icon(
+                                    Icons.photo,
+                                    color: Colors.white54,
+                                    size: 32,
+                                  ),
+                                ),
                     ),
                   ],
                 ),
@@ -98,10 +144,14 @@ class _AddChannelFormState extends State<AddChannelForm> {
                 color: Colors.white,
                 fontSize: 13,
               ),
-              decoration: _getInputDecoration('Logo URL'),
+              decoration: _getInputDecoration('Logo URL', isLogoUrl: true),
+              onChanged: _onLogoUrlChanged,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter a logo URL';
+                  return 'Please enter logo URL';
+                }
+                if (!_isValidImageUrl) {
+                  return 'Please enter a valid image URL';
                 }
                 return null;
               },
@@ -231,8 +281,19 @@ class _AddChannelFormState extends State<AddChannelForm> {
     );
   }
 
-  InputDecoration _getInputDecoration(String label) {
+  InputDecoration _getInputDecoration(String label, {bool isLogoUrl = false}) {
     return InputDecoration(
+      suffixIcon: isLogoUrl && _logoUrlController.text.isNotEmpty
+          ? IconButton(
+              icon: const Icon(Icons.clear),
+              onPressed: () {
+                _logoUrlController.clear();
+                setState(() {
+                  _isValidImageUrl = false;
+                });
+              },
+            )
+          : null,
       labelText: label,
       labelStyle: GoogleFonts.inter(
         color: Colors.white.withOpacity(0.7),

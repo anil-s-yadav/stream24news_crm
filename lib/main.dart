@@ -2,20 +2,25 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:stream24news_crm/screens/home_screen.dart';
 import 'firebase_options.dart';
+import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
+import 'services/shared_preferences.dart';
 import 'theme/app_theme.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalStoragePref.instance!.initPrefBox();
   try {
-    WidgetsFlutterBinding.ensureInitialized();
+    //  Always initialize Firebase directly
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    runApp(const MyApp());
-  } catch (e) {
-    log('Error initializing app: $e');
+    final isLoggedIn = LocalStoragePref.instance?.getLoginBool() ?? false;
+
+    runApp(MyApp(isLoggedIn: isLoggedIn));
+  } catch (e, stackTrace) {
+    log('Firebase initialization error: $e', stackTrace: stackTrace);
     runApp(const ErrorApp());
   }
 }
@@ -43,7 +48,9 @@ class ErrorApp extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +58,7 @@ class MyApp extends StatelessWidget {
       title: 'Stream24 News CRM',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme(),
-      home: const LoginScreen(),
+      home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
     );
   }
 }
