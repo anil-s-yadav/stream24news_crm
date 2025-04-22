@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/stream24news_crm/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Stream24 News CRM System">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="stream24news_crm">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <!-- Google Sign-in -->
+  <meta name="google-signin-client_id" content="1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com">
+
+  <title>Stream24 News CRM</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  
+  <!-- HLS.js for video streaming -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    var serviceWorkerVersion = '"2651679198"';
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  
+  <style>
+    body {
+      background-color: #0B1437;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 8px solid #0B1437;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #error-message {
+      color: white;
+      text-align: center;
+      padding: 20px;
+      display: none;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">
+    <div class="loader"></div>
+  </div>
+  <div id="error-message"></div>
+
+  <script>
+    window.addEventListener('load', function() {
+      var loading = document.querySelector('#loading');
+      var errorMessage = document.querySelector('#error-message');
+
+      // Initialize service worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('flutter-first-frame', function () {
+          navigator.serviceWorker.register('flutter_service_worker.js?v=2651679198');
+        });
+      }
+
+      function displayError(message) {
+        if (loading) loading.style.display = 'none';
+        if (errorMessage) {
+          errorMessage.style.display = 'block';
+          errorMessage.textContent = message;
+        }
+        console.error(message);
+      }
+
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: async function(engineInitializer) {
+          try {
+            const appRunner = await engineInitializer.initializeEngine();
+            await appRunner.runApp();
+            if (loading) loading.style.display = 'none';
+          } catch (e) {
+            displayError('Error initializing Flutter app: ' + e);
+          }
+        }
+      }).catch(function(err) {
+        displayError('Failed to load Flutter engine: ' + err);
+      });
+    });
+  </script>
+</body>
+</html>
