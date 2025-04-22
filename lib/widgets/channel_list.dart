@@ -178,7 +178,7 @@ class ChannelList extends StatelessWidget {
                       builder: (context) => VideoPlayScreen(url: channel.url)));
             },
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.27,
+              height: MediaQuery.of(context).size.height * 0.5,
               decoration: BoxDecoration(
                 color: const Color(0xFF111C44),
                 borderRadius: BorderRadius.circular(12),
@@ -275,38 +275,47 @@ class ChannelList extends StatelessWidget {
   }
 
   Widget _buildReportedChannelCard(ReportedChannelDisplay data) {
-    final channel = data.channel;
-    return InkWell(
-      onTap: () => onReportedChannelTap?.call(
-        data.user.displayName ?? 'Unknown',
-        data.user.photoURL ?? '',
-        channel.name,
-        'Reported by user',
-      ),
-      child: Stack(
-        children: [
-          _buildChannelCard(channel),
-          Positioned(
-            top: 6,
-            right: 6,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.red[400]!.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                'Reported',
-                style: GoogleFonts.inter(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.red[400],
-                ),
+    final reportedChannelData = data.channel;
+    final reportedChannelUser = data.user;
+    return Stack(
+      children: [
+        _buildChannelCard(reportedChannelData),
+        Positioned(
+          top: 6,
+          right: 6,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: Colors.red[400]!.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              'Reported',
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+                color: Colors.red[400],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: 20,
+          left: 10,
+          right: 10,
+          child: ElevatedButton(
+              onPressed: () {
+                log("Log: ${reportedChannelUser.photoURL ?? 'Unknown'}");
+                onReportedChannelTap?.call(
+                  reportedChannelUser.displayName ?? 'Unknown',
+                  reportedChannelUser.photoURL ?? '',
+                  reportedChannelData.name,
+                  'Reported by user',
+                );
+              },
+              child: Text("Edit")),
+        )
+      ],
     );
   }
 
