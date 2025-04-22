@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stream24news_crm/screens/video_play_screen.dart';
 import '../model/list_data/country_data.dart';
 import '../model/list_data/language_data.dart';
 import '../services/firebase_service.dart';
@@ -169,90 +170,101 @@ class ChannelList extends StatelessWidget {
         final isWide = constraints.maxWidth > 220;
 
         return Center(
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.27,
-            decoration: BoxDecoration(
-              color: const Color(0xFF111C44),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
-            child: SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      channel.logo,
-                      width: isWide ? 64 : 48,
-                      height: isWide ? 64 : 48,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
-                          const Icon(Icons.broken_image, color: Colors.white54),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                    Flexible(
-                      child: Text(
-                        channel.name,
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                          fontSize: isWide ? 14 : 12,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => VideoPlayScreen(url: channel.url)));
+            },
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.27,
+              decoration: BoxDecoration(
+                color: const Color(0xFF111C44),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding:
+                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.network(
+                        channel.logo,
+                        width: isWide ? 64 : 48,
+                        height: isWide ? 64 : 48,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const Icon(
+                            Icons.broken_image,
+                            color: Colors.white54),
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01),
+                      Flexible(
+                        child: Text(
+                          channel.name,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                            fontSize: isWide ? 14 : 12,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0025),
+                      Text(
+                        '${channel.language} - ${channel.region}',
+                        style: GoogleFonts.inter(
+                          color: Colors.white.withOpacity(0.6),
+                          fontSize: isWide ? 12 : 11,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.0025),
-                    Text(
-                      '${channel.language} - ${channel.region}',
-                      style: GoogleFonts.inter(
-                        color: Colors.white.withOpacity(0.6),
-                        fontSize: isWide ? 12 : 11,
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0025),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (getCountryFlag(channel.region) != null)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 4),
+                              child: Image.network(
+                                getCountryFlag(channel.region)!,
+                                width: isWide ? 18 : 14,
+                                height: isWide ? 14 : 10,
+                              ),
+                            ),
+                          Flexible(
+                            child: Text(
+                              '${getLanguageName(channel.language)} - ${getCountryName(channel.region)}',
+                              style: GoogleFonts.inter(
+                                color: Colors.white.withOpacity(0.6),
+                                fontSize: isWide ? 12 : 10,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.0025),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (getCountryFlag(channel.region) != null)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 4),
-                            child: Image.network(
-                              getCountryFlag(channel.region)!,
-                              width: isWide ? 18 : 14,
-                              height: isWide ? 14 : 10,
-                            ),
-                          ),
-                        Flexible(
-                          child: Text(
-                            '${getLanguageName(channel.language)} - ${getCountryName(channel.region)}',
-                            style: GoogleFonts.inter(
-                              color: Colors.white.withOpacity(0.6),
-                              fontSize: isWide ? 12 : 10,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0025),
+                      Text(
+                        '${channel.viewCount} views',
+                        style: GoogleFonts.inter(
+                          color: Colors.white.withOpacity(0.6),
+                          fontSize: isWide ? 12 : 10,
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.0025),
-                    Text(
-                      '${channel.viewCount} views',
-                      style: GoogleFonts.inter(
-                        color: Colors.white.withOpacity(0.6),
-                        fontSize: isWide ? 12 : 10,
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

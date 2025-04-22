@@ -13,7 +13,8 @@ import 'dart:ui' as ui;
 import 'package:stream24news_crm/screens/video_play_screen.dart';
 
 class WebVideoPlayer extends StatelessWidget {
-  const WebVideoPlayer({super.key});
+  const WebVideoPlayer({super.key, required this.url});
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +62,8 @@ class WebVideoPlayer extends StatelessWidget {
             })
           ]);
 
-          developer.log('Loading source: $hlsUrl');
-          hls.callMethod('loadSource', [hlsUrl]);
+          developer.log('Loading source: $url');
+          hls.callMethod('loadSource', [url]);
           hls.callMethod('attachMedia', [videoElement]);
 
           hls.callMethod('on', [
@@ -83,7 +84,7 @@ class WebVideoPlayer extends StatelessWidget {
         developer.log('Trying native playback');
         if (videoElement.canPlayType('application/vnd.apple.mpegurl') != '') {
           // For Safari which has native HLS support
-          videoElement.src = hlsUrl;
+          videoElement.src = url;
           videoElement.play();
         } else {
           developer.log('Neither HLS.js nor native HLS playback is supported');

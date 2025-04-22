@@ -3,7 +3,8 @@ import 'package:stream24news_crm/screens/video_play_screen.dart';
 import 'package:video_player/video_player.dart';
 
 class NativeVideoPlayer extends StatefulWidget {
-  const NativeVideoPlayer({super.key});
+  const NativeVideoPlayer({super.key, required this.url});
+  final String url;
 
   @override
   State<NativeVideoPlayer> createState() => _NativeVideoPlayerState();
@@ -16,7 +17,7 @@ class _NativeVideoPlayerState extends State<NativeVideoPlayer> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(hlsUrl));
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url));
     _initialize = _controller.initialize().then((_) => setState(() {}));
     _controller.play();
   }
