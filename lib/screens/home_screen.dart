@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _showEditForm = true;
       _selectedUserName = userName;
       _selectedChannelName = channelName;
+      _selectedPhotoUrl = photoUrl;
       _selectedDescription = description;
     });
   }
@@ -82,36 +83,86 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 800;
+
     return Scaffold(
-      body: Container(
-        color: const Color(0xFF0B1437),
-        child: Row(
-          children: [
-            Sidebar(
-              selectedIndex: _selectedIndex,
-              onItemSelected: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                  // Reset edit form state when changing sections
-                  if (index != 1) {
+      drawer: isMobile
+          ? Drawer(
+              child: Sidebar(
+                selectedIndex: _selectedIndex,
+                onItemSelected: (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                    Navigator.of(context).pop(); // Close drawer
                     _showEditForm = false;
                     _selectedUserName = null;
                     _selectedChannelName = null;
                     _selectedDescription = null;
-                  }
-                });
-              },
-              sections: _sections,
-            ),
-            Expanded(
-              child: _getContent(),
-            ),
-            AnimatedSize(
-              duration: const Duration(milliseconds: 200),
-              child: _getSideContent() ?? const SizedBox.shrink(),
-            ),
-          ],
-        ),
+                  });
+                },
+                sections: _sections,
+              ),
+            )
+          : null,
+      appBar: isMobile
+          ? AppBar(
+              title: Text(_sections[_selectedIndex]),
+              backgroundColor: const Color(0xFF0B1437),
+              actions: [
+                if (_selectedIndex == 0)
+                  IconButton(
+                    icon: Icon(
+                      _showEditForm ? Icons.close : Icons.add,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _showEditForm = !_showEditForm;
+                      });
+                    },
+                  ),
+              ],
+            )
+          : null,
+      body: Container(
+        color: const Color(0xFF0B1437),
+        child: isMobile
+            ? Column(
+                children: [
+                  if (_selectedIndex == 0 && _showEditForm)
+                    const AddChannelForm(),
+                  Expanded(child: _getContent()),
+                  if (_selectedIndex == 1 &&
+                      _showEditForm &&
+                      _selectedUserName != null)
+                    SizedBox(
+                      height: 300,
+                      child: _getSideContent(),
+                    ),
+                ],
+              )
+            : Row(
+                children: [
+                  Sidebar(
+                    selectedIndex: _selectedIndex,
+                    onItemSelected: (index) {
+                      setState(() {
+                        _selectedIndex = index;
+                        _showEditForm = false;
+                        _selectedUserName = null;
+                        _selectedChannelName = null;
+                        _selectedDescription = null;
+                      });
+                    },
+                    sections: _sections,
+                  ),
+                  Expanded(child: _getContent()),
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 200),
+                    child: _getSideContent() ?? const SizedBox.shrink(),
+                  ),
+                ],
+              ),
       ),
     );
   }
