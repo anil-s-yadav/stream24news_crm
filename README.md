@@ -70,3 +70,27 @@ lib/
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+
+
+
+
+
+
+# From your project root
+flutter build web
+
+# Move into the build folder
+cd build/web
+
+# Initialize git and switch to deploy branch (if not already)
+git init
+git remote add origin https://github.com/anil-s-yadav/stream24news_crm.git
+git checkout -b deploy
+
+# Stage and push
+git add .
+git commit -m "Update Flutter web app"
+git push -f origin deploy
+

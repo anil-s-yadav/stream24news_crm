@@ -25,17 +25,11 @@ class _EditChannelFormState extends State<EditChannelForm> {
   final _formKey = GlobalKey<FormState>();
   String _status = 'under_review';
 
-  final List<String> _statusOptions = [
-    'under_review',
-    'resolved',
-    'dismissed',
-    'blocked'
-  ];
+  final List<String> _statusOptions = ['under_review', 'resolved', 'blocked'];
 
   final Map<String, String> _statusLabels = {
     'under_review': 'Under Review',
     'resolved': 'Resolved',
-    'dismissed': 'Dismissed',
     'blocked': 'Channel Blocked'
   };
 
@@ -320,8 +314,6 @@ class _EditChannelFormState extends State<EditChannelForm> {
     switch (status) {
       case 'resolved':
         return Colors.green;
-      case 'dismissed':
-        return Colors.grey;
       case 'blocked':
         return Colors.red[400]!;
       default:

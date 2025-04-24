@@ -178,11 +178,32 @@ class Sidebar extends StatelessWidget {
                 ),
               ),
               onTap: () async {
-                // TODO: Implement logout functionality
-                await AuthService().signOut();
-                LocalStoragePref.instance?.setLoginBool(false);
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Logout'),
+                    content: Text('Are you sure you want to logout?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await AuthService().signOut();
+                          LocalStoragePref.instance?.setLoginBool(false);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
+                        },
+                        child: Text('Logout'),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           ),
