@@ -60,6 +60,7 @@ class NewsList extends StatelessWidget {
                         TextButton(
                           onPressed: () async {
                             await FirebaseService().deleteAllNews();
+                            Navigator.pop(context);
                           },
                           child: const Text('Delete'),
                         ),

@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class EditChannelForm extends StatefulWidget {
   final String userName;
   final String channelName;
-  final String photoUrl;
+  final String channellogo;
   final String description;
   final VoidCallback onClose;
 
@@ -12,7 +12,7 @@ class EditChannelForm extends StatefulWidget {
     super.key,
     required this.userName,
     required this.channelName,
-    required this.photoUrl,
+    required this.channellogo,
     required this.description,
     required this.onClose,
   });
@@ -25,12 +25,12 @@ class _EditChannelFormState extends State<EditChannelForm> {
   final _formKey = GlobalKey<FormState>();
   String _status = 'under_review';
 
-  final List<String> _statusOptions = ['under_review', 'resolved', 'blocked'];
+  final List<String> _statusOptions = ['under_review', 'resolved', 'delete'];
 
   final Map<String, String> _statusLabels = {
     'under_review': 'Under Review',
     'resolved': 'Resolved',
-    'blocked': 'Channel Blocked'
+    'delete': 'Delete Channel'
   };
 
   @override
@@ -103,7 +103,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                           const SizedBox(height: 4),
                           ListTile(
                             leading: CircleAvatar(
-                              foregroundImage: NetworkImage(widget.photoUrl),
+                              foregroundImage: NetworkImage(widget.channellogo),
                             ),
                             title: Text(
                               widget.userName,

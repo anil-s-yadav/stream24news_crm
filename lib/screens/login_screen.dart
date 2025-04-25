@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../services/auth_service.dart';
 import '../services/shared_preferences.dart';
 import 'home_screen.dart';
@@ -16,7 +16,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
   String? _errorMessage;
 
   @override
@@ -27,16 +26,37 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> emailPasswordSignIn() async {
-    User? user = await AuthService().loginUserWithEmailAndPassword(
-      _emailController.text.trim(),
-      _passwordController.text,
-    );
-    if (user != null && user.email == AuthService.authorizedEmail) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+    if (!_formKey.currentState!.validate()) return;
+    EasyLoading.show(status: 'Signing in...');
+    try {
+      User? user = await AuthService().loginUserWithEmailAndPassword(
+        _emailController.text.trim(),
+        _passwordController.text,
       );
-      LocalStoragePref.instance?.setLoginBool(true);
+
+      if (user != null && user.email == AuthService.authorizedEmail) {
+        await LocalStoragePref.instance?.setLoginBool(true);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+        EasyLoading.dismiss();
+      } else {
+        setState(() {
+          _errorMessage = 'Unauthorized access';
+        });
+        EasyLoading.dismiss();
+      }
+    } on FirebaseAuthException catch (_) {
+      setState(() {
+        _errorMessage = 'Invalid email or password.';
+      });
+      EasyLoading.dismiss();
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'An unexpected error occurred. Please try again.';
+      });
+      EasyLoading.dismiss();
     }
   }
 
@@ -153,22 +173,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             height: 48,
                             child: ElevatedButton(
-                              onPressed:
-                                  _isLoading ? null : emailPasswordSignIn,
+                              onPressed: () {
+                                emailPasswordSignIn();
+                              },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              child: _isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                      ),
-                                    )
-                                  : const Text('Sign In'),
+                              child: const Text('Sign In'),
                             ),
                           ),
                         ],

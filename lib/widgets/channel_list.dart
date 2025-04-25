@@ -119,10 +119,10 @@ class ChannelList extends StatelessWidget {
             final reported = snapshot.data ?? [];
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 280,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
-                childAspectRatio: 1,
+                maxCrossAxisExtent: 300,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+                childAspectRatio: 1.1,
               ),
               padding: const EdgeInsets.all(16),
               itemCount: reported.length,
@@ -183,7 +183,8 @@ class ChannelList extends StatelessWidget {
     }
   }
 
-  Widget _buildChannelCard(AllLiveChannelModel channel) {
+  Widget _buildChannelCard(AllLiveChannelModel channel,
+      {bool isReported = false, ReportedChannelDisplay? data}) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isWide = constraints.maxWidth > 220;
@@ -197,7 +198,6 @@ class ChannelList extends StatelessWidget {
                       builder: (context) => VideoPlayScreen(url: channel.url)));
             },
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.5,
               decoration: BoxDecoration(
                 color: const Color(0xFF111C44),
                 borderRadius: BorderRadius.circular(12),
@@ -282,6 +282,17 @@ class ChannelList extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center,
                       ),
+                      if (isReported)
+                        ElevatedButton(
+                            onPressed: () {
+                              onReportedChannelTap?.call(
+                                data?.user.displayName ?? 'Unknown',
+                                data?.user.photoURL ?? '',
+                                data?.channel.name ?? '',
+                                'Reported by user',
+                              );
+                            },
+                            child: Text("Edit")),
                     ],
                   ),
                 ),
@@ -295,10 +306,9 @@ class ChannelList extends StatelessWidget {
 
   Widget _buildReportedChannelCard(ReportedChannelDisplay data) {
     final reportedChannelData = data.channel;
-    final reportedChannelUser = data.user;
     return Stack(
       children: [
-        _buildChannelCard(reportedChannelData),
+        _buildChannelCard(reportedChannelData, isReported: true, data: data),
         Positioned(
           top: 6,
           right: 6,
@@ -318,22 +328,6 @@ class ChannelList extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          bottom: 20,
-          left: 10,
-          right: 10,
-          child: ElevatedButton(
-              onPressed: () {
-                // log("Log: ${reportedChannelUser.photoURL ?? 'Unknown'}");
-                onReportedChannelTap?.call(
-                  reportedChannelUser.displayName ?? 'Unknown',
-                  reportedChannelUser.photoURL ?? '',
-                  reportedChannelData.name,
-                  'Reported by user',
-                );
-              },
-              child: Text("Edit")),
-        )
       ],
     );
   }
@@ -341,8 +335,8 @@ class ChannelList extends StatelessWidget {
   Widget _buildRequestedChannelCard(
       BuildContext context, RequestedChannelData item) {
     final userName = item.user?.displayName ?? 'Unknown';
-    final channelName = item.channelName ?? 'N/A';
-    final description = item.description ?? 'No description provided';
+    final channelName = item.channelName;
+    final description = item.description;
     log(item.user?.photoURL ?? '');
     return Container(
       constraints: const BoxConstraints(minHeight: 100),
