@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../services/data_service.dart';
+import 'package:stream24news_crm/services/firebase_service.dart';
+import '../model/data_service.dart';
 
 class NewsList extends StatelessWidget {
   const NewsList({super.key});
@@ -41,8 +43,8 @@ class NewsList extends StatelessWidget {
           Row(
             children: [
               ElevatedButton.icon(
-                onPressed: () {
-                  // TODO: Implement delete all news
+                onPressed: () async {
+                  await FirebaseService().deleteAllNews();
                 },
                 icon: const Icon(Icons.delete),
                 label: const Text('Delete all news'),
@@ -58,7 +60,7 @@ class NewsList extends StatelessWidget {
               const SizedBox(width: 16),
               ElevatedButton.icon(
                 onPressed: () {
-                  // TODO: Implement reload all news
+                  EasyLoading.showInfo('This feature is not available yet');
                 },
                 icon: const Icon(Icons.refresh),
                 label: const Text('Reload all news'),

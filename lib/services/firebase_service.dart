@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../model/model.dart';
 
 // -------------------- Firebase Service --------------------
@@ -13,18 +16,20 @@ class FirebaseService {
   /// Fetch all channels from Firestore
   static Future<List<AllLiveChannelModel>> fetchAllChannels() async {
     final List<AllLiveChannelModel> channels = [];
-
-    final snapshot = await _firestore
-        .collection('live_chennels')
-        .doc('6Kc57CnXtYzg85cD0FXS')
-        .collection('all_channels')
-        .get();
-
-    for (var doc in snapshot.docs) {
-      channels.add(AllLiveChannelModel.fromFirestore(doc.id, doc.data()));
+    try {
+      final snapshot = await _firestore
+          .collection('live_chennels')
+          .doc('6Kc57CnXtYzg85cD0FXS')
+          .collection('all_channels')
+          .get();
+      for (var doc in snapshot.docs) {
+        channels.add(AllLiveChannelModel.fromFirestore(doc.data()));
+      }
+      return channels;
+    } catch (e) {
+      log('Error fetching all channels: $e');
+      return [];
     }
-
-    return channels;
   }
 
   /// Fetch reported channels (from collection root)
@@ -47,7 +52,7 @@ class FirebaseService {
         .get();
 
     if (doc.exists) {
-      return AllLiveChannelModel.fromFirestore(id, doc.data()!);
+      return AllLiveChannelModel.fromFirestore(doc.data()!);
     }
     return null;
   }
@@ -116,5 +121,38 @@ class FirebaseService {
     }
 
     return detailedList;
+  }
+
+  Future<void> addChannel(AllLiveChannelModel channel) async {
+    try {
+      EasyLoading.show(status: 'Adding channel...');
+      final docRef = await _firestore
+          .collection('live_chennels')
+          .doc('6Kc57CnXtYzg85cD0FXS')
+          .collection('all_channels')
+          .add(channel.toMap());
+
+      EasyLoading.showSuccess('Channel added successfully');
+      log('Channel added successfully $docRef');
+    } catch (e, stack) {
+      log('Error adding channel: $e', stackTrace: stack);
+      EasyLoading.showError('Failed to add channel');
+    }
+  }
+
+  Future<void> deleteAllNews() async {
+    try {
+      EasyLoading.show(status: 'Deleting all news...');
+      final snapshot = await _firestore.collection('news').get();
+      for (final doc in snapshot.docs) {
+        await doc.reference.delete();
+      }
+      await Future.delayed(const Duration(seconds: 2));
+      EasyLoading.dismiss();
+      EasyLoading.showSuccess('All news deleted successfully');
+    } catch (e) {
+      log('Error deleting news: $e');
+      EasyLoading.showError('Failed to delete news');
+    }
   }
 }

@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:stream24news_crm/model/list_data/language_data.dart';
+import 'package:stream24news_crm/model/model.dart';
+import 'package:stream24news_crm/services/firebase_service.dart';
+
+import '../model/list_data/country_data.dart';
 
 class AddChannelForm extends StatefulWidget {
   const AddChannelForm({super.key});
@@ -15,9 +21,8 @@ class _AddChannelFormState extends State<AddChannelForm> {
   final _channelNameController = TextEditingController();
   final _channelUrlController = TextEditingController();
   bool _isValidImageUrl = false;
-  String _selectedLanguage = 'Hindi';
-
-  final List<String> _languages = ['Hindi', 'English', 'Tamil', 'Telugu'];
+  String _selectedLanguage = 'Hindi'; // default selected key
+  String _selectedRegion = 'India'; // default name
 
   @override
   void dispose() {
@@ -191,71 +196,130 @@ class _AddChannelFormState extends State<AddChannelForm> {
             ),
             const SizedBox(height: 12),
             Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF192555),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.05),
-                ),
-              ),
-              child: DropdownButtonFormField<String>(
-                value: _selectedLanguage,
-                dropdownColor: const Color(0xFF192555),
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 13,
-                ),
-                decoration: InputDecoration(
-                  labelText: 'Language',
-                  labelStyle: GoogleFonts.inter(
-                    color: Colors.white.withOpacity(0.7),
-                    fontSize: 12,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 12,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF192555),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.05),
                   ),
                 ),
-                items: _languages.map((language) {
-                  return DropdownMenuItem(
-                    value: language,
-                    child: Text(
-                      language,
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: 13,
-                      ),
+                child: DropdownButtonFormField<String>(
+                  value: _selectedLanguage,
+                  dropdownColor: const Color(0xFF192555),
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 13,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: 'Language',
+                    labelStyle: GoogleFonts.inter(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 12,
                     ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _selectedLanguage = value;
-                    });
-                  }
-                },
-              ),
-            ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 12),
+                  ),
+                  items: languages.keys.map((key) {
+                    return DropdownMenuItem(
+                      value: key,
+                      child: Text(
+                        key,
+                        style: GoogleFonts.inter(
+                            color: Colors.white, fontSize: 13),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedLanguage = value;
+                      });
+                    }
+                  },
+                )),
+            const SizedBox(height: 12),
+            Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF192555),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.05),
+                  ),
+                ),
+                child: DropdownButtonFormField<String>(
+                  value: _selectedRegion,
+                  dropdownColor: const Color(0xFF192555),
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 13,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: 'Region',
+                    labelStyle: GoogleFonts.inter(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 12,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 12),
+                  ),
+                  items: countries.map((country) {
+                    return DropdownMenuItem(
+                      value: country['name'],
+                      child: Text(
+                        country['name']!,
+                        style: GoogleFonts.inter(
+                            color: Colors.white, fontSize: 13),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedRegion = value;
+                      });
+                    }
+                  },
+                )),
             const SizedBox(height: 20),
             SizedBox(
               height: 40,
               child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // TODO: Implement add channel functionality
+                    FirebaseService().addChannel(AllLiveChannelModel(
+                      name: _channelNameController.text,
+                      url: _channelUrlController.text,
+                      logo: _logoUrlController.text,
+                      language: languages[_selectedLanguage]!,
+                      region: countries.firstWhere(
+                          (e) => e['name'] == _selectedRegion)['code']!,
+                      viewCount: 0,
+                      viewedAt: Timestamp.now(),
+                    ));
                   }
                 },
                 style: ElevatedButton.styleFrom(

@@ -40,6 +40,7 @@ dependencies:
   video_player: ^2.7.0
   chewie: ^1.7.0
   web: 0.5.1
+  flutter_easyloading: ^3.0.5
 
   # Firebase dependencies
   firebase_core: ^2.15.1

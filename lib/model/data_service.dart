@@ -33,68 +33,6 @@ class News {
 }
 
 class DataService {
-  // Sample data for all channels
-  static List<Channel> getAllChannels() {
-    return [
-      Channel(name: 'News 24', language: 'English'),
-      Channel(name: 'Aaj Tak', language: 'Hindi'),
-      Channel(name: 'NDTV', language: 'English'),
-      Channel(name: 'BBC World', language: 'English'),
-      Channel(name: 'CNN', language: 'English'),
-      Channel(name: 'Al Jazeera', language: 'English'),
-      Channel(name: 'Zee News', language: 'Hindi'),
-      Channel(name: 'India Today', language: 'English'),
-    ];
-  }
-
-  // Sample data for reported channels
-  static List<Channel> getReportedChannels() {
-    return [
-      Channel(
-        name: 'Fake News 24',
-        language: 'English',
-        reportedBy: 'John Doe',
-        reportReason: 'Spreading misinformation',
-      ),
-      Channel(
-        name: 'Clickbait News',
-        language: 'Hindi',
-        reportedBy: 'Jane Smith',
-        reportReason: 'Misleading content',
-      ),
-      Channel(
-        name: 'Spam News',
-        language: 'English',
-        reportedBy: 'Mike Johnson',
-        reportReason: 'Excessive advertisements',
-      ),
-    ];
-  }
-
-  // Sample data for requested channels
-  static List<Channel> getRequestedChannels() {
-    return [
-      Channel(
-        name: 'Local News 24',
-        language: 'English',
-        requestedBy: 'Community Group',
-        description: 'Local news coverage needed',
-      ),
-      Channel(
-        name: 'Tech News Daily',
-        language: 'English',
-        requestedBy: 'Tech Association',
-        description: 'Technology focused news channel',
-      ),
-      Channel(
-        name: 'Sports Central',
-        language: 'Hindi',
-        requestedBy: 'Sports Federation',
-        description: '24/7 sports coverage',
-      ),
-    ];
-  }
-
   // Sample data for news
   static List<News> getNews() {
     return [
