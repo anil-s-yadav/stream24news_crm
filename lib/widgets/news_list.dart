@@ -44,7 +44,28 @@ class NewsList extends StatelessWidget {
             children: [
               ElevatedButton.icon(
                 onPressed: () async {
-                  await FirebaseService().deleteAllNews();
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Delete all news'),
+                      content: const Text(
+                          'Are you sure you want to delete all news?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            await FirebaseService().deleteAllNews();
+                          },
+                          child: const Text('Delete'),
+                        ),
+                      ],
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.delete),
                 label: const Text('Delete all news'),

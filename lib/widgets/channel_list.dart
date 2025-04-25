@@ -82,9 +82,6 @@ class ChannelList extends StatelessWidget {
   }
 
   Widget _getContentByType(double width) {
-    final isLarge = width > 1000;
-    final maxCrossExtent = isLarge ? 250.0 : 180.0;
-
     switch (type) {
       case ChannelListType.all:
         return FutureBuilder<List<AllLiveChannelModel>>(
@@ -97,7 +94,7 @@ class ChannelList extends StatelessWidget {
             final channels = snapshot.data ?? [];
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: maxCrossExtent,
+                maxCrossAxisExtent: 280,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 childAspectRatio: 1.1,
@@ -122,7 +119,7 @@ class ChannelList extends StatelessWidget {
             final reported = snapshot.data ?? [];
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: maxCrossExtent,
+                maxCrossAxisExtent: 280,
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
                 childAspectRatio: 1,
@@ -146,17 +143,39 @@ class ChannelList extends StatelessWidget {
             }
 
             final channels = snapshot.data ?? [];
-            return GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: width > 600 ? 500 : 300,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 3.5,
-              ),
-              itemCount: channels.length,
-              itemBuilder: (context, index) {
-                return _buildRequestedChannelCard(context, channels[index]);
+
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                // double width = constraints.maxWidth;
+
+                // if (width < 820) {
+                //  Use ListView on narrow screens
+                return ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: channels.length,
+                  itemBuilder: (context, index) {
+                    return _buildRequestedChannelCard(context, channels[index]);
+                  },
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 16),
+                );
+                // } else {
+                //   //  Use GridView for larger screens
+                //   return GridView.builder(
+                //     padding: const EdgeInsets.all(16),
+                //     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                //       maxCrossAxisExtent: 500,
+                //       crossAxisSpacing: 16,
+                //       mainAxisSpacing: 16,
+                //       childAspectRatio: width > 710 ? 3.5 : 3.0,
+                //     ),
+                //     itemCount: channels.length,
+                //     itemBuilder: (context, index) {
+                //       return _buildRequestedChannelCard(
+                //           context, channels[index]);
+                //     },
+                //   );
+                // }
               },
             );
           },
@@ -305,7 +324,7 @@ class ChannelList extends StatelessWidget {
           right: 10,
           child: ElevatedButton(
               onPressed: () {
-                log("Log: ${reportedChannelUser.photoURL ?? 'Unknown'}");
+                // log("Log: ${reportedChannelUser.photoURL ?? 'Unknown'}");
                 onReportedChannelTap?.call(
                   reportedChannelUser.displayName ?? 'Unknown',
                   reportedChannelUser.photoURL ?? '',
@@ -322,47 +341,61 @@ class ChannelList extends StatelessWidget {
   Widget _buildRequestedChannelCard(
       BuildContext context, RequestedChannelData item) {
     final userName = item.user?.displayName ?? 'Unknown';
+    final channelName = item.channelName ?? 'N/A';
+    final description = item.description ?? 'No description provided';
+    log(item.user?.photoURL ?? '');
     return Container(
+      constraints: const BoxConstraints(minHeight: 100),
       decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
         border: Border.all(
           color: Colors.white.withOpacity(0.1),
           width: 1,
         ),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(16),
       ),
       padding: const EdgeInsets.all(12),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
-            radius: 20,
+            radius: 24,
             backgroundColor:
-                Theme.of(context).colorScheme.primary.withOpacity(0.2),
-            child: Text(
-              userName.isNotEmpty ? userName[0].toUpperCase() : '?',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+                Theme.of(context).colorScheme.primary.withOpacity(0.15),
+            child: Image.network(
+              item.user?.photoURL ?? '',
+              width: 24,
+              height: 24,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.broken_image, color: Colors.white54),
             ),
+            // Text(
+            //   userName[0].toUpperCase(),
+            //   style: TextStyle(
+            //     color: Theme.of(context).colorScheme.primary,
+            //     fontSize: 18,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   userName,
                   style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'channel name - ${item.channelName}',
+                  'Channel: $channelName',
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.white.withOpacity(0.9),
@@ -370,14 +403,14 @@ class ChannelList extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(
-                  'Desc - ${item.description}',
+                  description,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withOpacity(0.6),
+                    color: Colors.white.withOpacity(0.7),
                   ),
-                  maxLines: 1,
+                  maxLines: 100,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
