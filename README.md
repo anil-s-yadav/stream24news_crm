@@ -2,6 +2,9 @@
 
 A Flutter web application for managing news channels and content. This CRM system allows you to manage live channels, handle reported and requested channels, and manage news content.
 
+#url
+https://stream24news-crm.onrender.com
+
 ## Features
 
 - View all channels in a grid layout
