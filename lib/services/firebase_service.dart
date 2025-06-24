@@ -107,16 +107,22 @@ class FirebaseService {
     final rawReports = await getReportedChannelsRaw();
     List<ReportedChannelDisplay> detailedList = [];
 
-    final user = currentUser;
-    if (user == null) return detailedList;
-
     for (final report in rawReports) {
-      final channelId = report['channel_id'];
-      if (channelId == null) continue;
+      final channelId = report['channels_id'];
+      final reportedBy = report['reported_by'];
+
+      if (channelId == null || reportedBy == null) continue;
 
       final channel = await getChannelById(channelId);
+      final user = await getFirestoreUserDataById(reportedBy);
+
       if (channel != null) {
-        detailedList.add(ReportedChannelDisplay(channel: channel, user: user));
+        detailedList.add(
+          ReportedChannelDisplay(
+            channel: channel,
+            user: user,
+          ),
+        );
       }
     }
 

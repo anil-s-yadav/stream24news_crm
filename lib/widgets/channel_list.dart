@@ -286,7 +286,7 @@ class ChannelList extends StatelessWidget {
                         ElevatedButton(
                             onPressed: () {
                               onReportedChannelTap?.call(
-                                data?.user.displayName ?? 'Unknown',
+                                data?.user. ?? 'Unknown',
                                 data?.user.photoURL ?? '',
                                 data?.channel.name ?? '',
                                 'Reported by user',
