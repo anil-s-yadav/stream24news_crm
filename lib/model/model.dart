@@ -30,7 +30,7 @@ class AllLiveChannelModel {
       language: data['language'] ?? '',
       region: data['region'] ?? '',
       viewCount: data['viewCount'] ?? 0,
-      viewedAt: data['viewedAt'] ?? Timestamp.now(),
+      viewedAt: data['viewAt'] ?? Timestamp.now(),
     );
   }
 
@@ -42,7 +42,7 @@ class AllLiveChannelModel {
       'language': language,
       'region': region,
       'viewCount': viewCount,
-      'viewAt': viewCount,
+      'viewAt': viewedAt,
     };
   }
 }

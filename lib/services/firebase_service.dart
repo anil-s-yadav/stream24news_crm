@@ -111,7 +111,7 @@ class FirebaseService {
     if (user == null) return detailedList;
 
     for (final report in rawReports) {
-      final channelId = report['channel_id'];
+      final channelId = report['channels_id'];
       if (channelId == null) continue;
 
       final channel = await getChannelById(channelId);
@@ -123,7 +123,7 @@ class FirebaseService {
     return detailedList;
   }
 
-  Future<void> addChannel(AllLiveChannelModel channel) async {
+  Future<bool> addChannel(AllLiveChannelModel channel) async {
     try {
       EasyLoading.show(status: 'Adding channel...');
       final docRef = await _firestore
@@ -134,9 +134,11 @@ class FirebaseService {
 
       EasyLoading.showSuccess('Channel added successfully');
       log('Channel added successfully $docRef');
+      return true;
     } catch (e, stack) {
       log('Error adding channel: $e', stackTrace: stack);
       EasyLoading.showError('Failed to add channel');
+      return false;
     }
   }
 

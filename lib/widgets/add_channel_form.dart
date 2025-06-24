@@ -168,7 +168,7 @@ class _AddChannelFormState extends State<AddChannelForm> {
         child: ElevatedButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              FirebaseService().addChannel(AllLiveChannelModel(
+              final data = FirebaseService().addChannel(AllLiveChannelModel(
                 name: _channelNameController.text,
                 url: _channelUrlController.text,
                 logo: _logoUrlController.text,
@@ -178,6 +178,12 @@ class _AddChannelFormState extends State<AddChannelForm> {
                 viewCount: 0,
                 viewedAt: Timestamp.now(),
               ));
+              if (data == true) {
+                _channelNameController.clear();
+                _channelUrlController.clear();
+                _logoUrlController.clear();
+                _logoUrlController.clear();
+              }
             }
           },
           style: ElevatedButton.styleFrom(
