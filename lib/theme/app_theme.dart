@@ -96,13 +96,13 @@ class AppTheme {
           ),
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: const CardThemeData(
         color: _cardColor,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
           side: BorderSide(
-            color: Colors.white.withOpacity(0.05),
+            color: Color(0x14FFFFFF), // 0.05 opacity white
             width: 1,
           ),
         ),
