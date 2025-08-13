@@ -1,16 +1,8 @@
-// Only import dart:ui as ui on web
-// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'dart:js' as js;
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:ui_web' as ui_web;
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
-
-/// Use conditional import for platform view registry
-// ignore: undefined_prefixed_name
-import 'dart:ui' as ui;
-
-import 'package:stream24news_crm/screens/video_play_screen.dart';
 
 class WebVideoPlayer extends StatelessWidget {
   final String url;
@@ -60,14 +52,12 @@ class WebVideoPlayer extends StatelessWidget {
       }
     });
 
-    // Register view with a unique ID
-    // ignore: undefined_prefixed_name
-    ui.platformViewRegistry
+    ui_web.platformViewRegistry
         .registerViewFactory(viewId, (int _) => videoElement);
 
     return Container(
       color: Colors.black,
-      child: HtmlElementView(viewType: viewId),
+      // child: HtmlElementView(viewType: viewId),
     );
   }
 }

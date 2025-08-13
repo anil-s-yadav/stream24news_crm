@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 import 'native_video_player.dart';
 import 'web_video_player.dart';
@@ -16,7 +17,7 @@ class VideoPlayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Live Video")),
+      appBar: AppBar(title: const Text("Live Video")),
       body: Center(
         child: VideoPlayerWrapper(url: url),
       ),
@@ -31,8 +32,10 @@ class VideoPlayerWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
+      log("web");
       return WebVideoPlayer(url: url);
     } else {
+      log("phone");
       return NativeVideoPlayer(url: url);
     }
   }
