@@ -49,7 +49,7 @@ class AllLiveChannelModel {
 
 class ReportedChannelDisplay {
   final AllLiveChannelModel channel;
-  final User user;
+  final Map<String, dynamic>? user;
 
   ReportedChannelDisplay({
     required this.channel,
