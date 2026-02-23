@@ -181,14 +181,14 @@ class Sidebar extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text('Logout'),
-                    content: Text('Are you sure you want to logout?'),
+                    title: const Text('Logout'),
+                    content: const Text('Are you sure you want to logout?'),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text('Cancel'),
+                        child: const Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () async {
@@ -197,9 +197,9 @@ class Sidebar extends StatelessWidget {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginScreen()));
+                                  builder: (context) => const LoginScreen()));
                         },
-                        child: Text('Logout'),
+                        child: const Text('Logout'),
                       ),
                     ],
                   ),

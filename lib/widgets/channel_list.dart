@@ -64,11 +64,11 @@ class ChannelList extends StatelessWidget {
             children: [
               Text(
                 _title,
-                style: GoogleFonts.inter(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
               ),
               const SizedBox(height: 16),
               Expanded(
@@ -93,7 +93,7 @@ class ChannelList extends StatelessWidget {
 
             final channels = snapshot.data ?? [];
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 280,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
@@ -118,7 +118,7 @@ class ChannelList extends StatelessWidget {
 
             final reported = snapshot.data ?? [];
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 300,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
@@ -128,7 +128,7 @@ class ChannelList extends StatelessWidget {
               itemCount: reported.length,
               itemBuilder: (context, index) {
                 final data = reported[index];
-                return _buildReportedChannelCard(data);
+                return _buildReportedChannelCard(data, context);
               },
             );
           },
@@ -225,11 +225,12 @@ class ChannelList extends StatelessWidget {
                       Flexible(
                         child: Text(
                           channel.name,
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                            fontSize: isWide ? 14 : 12,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                    fontSize: isWide ? 14 : 12,
+                                  ),
                           textAlign: TextAlign.center,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -239,10 +240,10 @@ class ChannelList extends StatelessWidget {
                           height: MediaQuery.of(context).size.height * 0.0025),
                       Text(
                         '${channel.language} - ${channel.region}',
-                        style: GoogleFonts.inter(
-                          color: Colors.white.withOpacity(0.6),
-                          fontSize: isWide ? 12 : 11,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colors.white.withOpacity(0.6),
+                              fontSize: isWide ? 12 : 11,
+                            ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -263,10 +264,13 @@ class ChannelList extends StatelessWidget {
                           Flexible(
                             child: Text(
                               '${getLanguageName(channel.language)} - ${getCountryName(channel.region)}',
-                              style: GoogleFonts.inter(
-                                color: Colors.white.withOpacity(0.6),
-                                fontSize: isWide ? 12 : 10,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: Colors.white.withOpacity(0.6),
+                                    fontSize: isWide ? 12 : 10,
+                                  ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -276,10 +280,10 @@ class ChannelList extends StatelessWidget {
                           height: MediaQuery.of(context).size.height * 0.0025),
                       Text(
                         '${channel.viewCount} views',
-                        style: GoogleFonts.inter(
-                          color: Colors.white.withOpacity(0.6),
-                          fontSize: isWide ? 12 : 10,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colors.white.withOpacity(0.6),
+                              fontSize: isWide ? 12 : 10,
+                            ),
                         textAlign: TextAlign.center,
                       ),
                       if (isReported)
@@ -292,7 +296,7 @@ class ChannelList extends StatelessWidget {
                                 'Reported by user',
                               );
                             },
-                            child: Text("Edit")),
+                            child: const Text("Edit")),
                     ],
                   ),
                 ),
@@ -304,7 +308,8 @@ class ChannelList extends StatelessWidget {
     );
   }
 
-  Widget _buildReportedChannelCard(ReportedChannelDisplay data) {
+  Widget _buildReportedChannelCard(
+      ReportedChannelDisplay data, BuildContext context) {
     final reportedChannelData = data.channel;
     return Stack(
       children: [
@@ -320,11 +325,11 @@ class ChannelList extends StatelessWidget {
             ),
             child: Text(
               'Reported',
-              style: GoogleFonts.inter(
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-                color: Colors.red[400],
-              ),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.red[400],
+                  ),
             ),
           ),
         ),

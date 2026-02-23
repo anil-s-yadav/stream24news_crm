@@ -148,7 +148,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                         ),
                       ),
                       child: DropdownButtonFormField<String>(
-                        value: _status,
+                        initialValue: _status,
                         dropdownColor: const Color(0xFF192555),
                         style: GoogleFonts.inter(
                           color: Colors.white,

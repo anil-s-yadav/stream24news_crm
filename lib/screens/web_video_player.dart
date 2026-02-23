@@ -1,63 +1,68 @@
-import 'dart:html' as html;
-import 'dart:js' as js;
-import 'dart:ui_web' as ui_web;
 import 'package:flutter/material.dart';
-import 'dart:developer' as developer;
+import 'package:video_player/video_player.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
-class WebVideoPlayer extends StatelessWidget {
+class WebVideoPlayer extends StatefulWidget {
   final String url;
 
   const WebVideoPlayer({super.key, required this.url});
 
   @override
-  Widget build(BuildContext context) {
-    final String viewId =
-        'web-video-player-${DateTime.now().millisecondsSinceEpoch}';
-    developer.log('Initializing web video player for $url');
+  State<WebVideoPlayer> createState() => _WebVideoPlayerState();
+}
 
-    final videoElement = html.VideoElement()
-      ..style.border = 'none'
-      ..style.width = '100%'
-      ..style.height = '100%'
-      ..controls = true;
+class _WebVideoPlayerState extends State<WebVideoPlayer> {
+  late VideoPlayerController _controller;
+  bool _initialized = false;
 
-    final script = html.ScriptElement()
-      ..src = 'https://cdn.jsdelivr.net/npm/hls.js@1.4.12'
-      ..type = 'application/javascript'
-      ..async = true;
-
-    html.document.head?.children.add(script);
-
-    script.onLoad.listen((_) {
-      if (js.context['Hls'] == null) return;
-
-      if (js.context['Hls'].callMethod('isSupported')) {
-        final hls = js.JsObject(js.context['Hls']);
-
-        hls.callMethod('loadSource', [url]);
-        hls.callMethod('attachMedia', [videoElement]);
-
-        hls.callMethod('on', [
-          'hlsManifestParsed',
-          js.allowInterop(() {
-            videoElement.play().catchError((error) {
-              developer.log('Playback error: $error');
-            });
-          })
-        ]);
-      } else if (videoElement.canPlayType('application/vnd.apple.mpegurl') !=
-          '') {
-        videoElement.src = url;
-        videoElement.play();
-      }
+  @override
+  void initState() {
+    super.initState();
+    _controller = kIsWeb
+        ? VideoPlayerController.network(widget.url)
+        : VideoPlayerController.network(widget.url);
+    _controller.initialize().then((_) {
+      setState(() {
+        _initialized = true;
+      });
     });
+  }
 
-    ui_web.platformViewRegistry
-        .registerViewFactory(viewId, (int _) => videoElement);
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
-    return Container(
-      color: Colors.black,
-      // child: HtmlElementView(viewType: viewId),
+  @override
+  Widget build(BuildContext context) {
+    if (!_initialized) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return AspectRatio(
+      aspectRatio: _controller.value.aspectRatio,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          VideoPlayer(_controller),
+          VideoProgressIndicator(_controller, allowScrubbing: true),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: IconButton(
+              icon: Icon(
+                _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+              ),
+              onPressed: () {
+                setState(() {
+                  _controller.value.isPlaying
+                      ? _controller.pause()
+                      : _controller.play();
+                });
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

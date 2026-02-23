@@ -98,6 +98,31 @@ class NewsList extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
+          section(
+            "Firebase Daily Limits",
+            [
+              limitRow("Reads", "50,000"),
+              limitRow("Writes", "20,000"),
+              limitRow("Deletes", "20,000"),
+            ],
+          ),
+          section(
+            "GitHub Actions (Free Plan)",
+            [
+              limitRow("Artifact storage", "500 MB"),
+              limitRow("Minutes / month", "2,000"),
+              limitRow("Cache storage", "10 GB"),
+            ],
+          ),
+          section(
+            "News API Limits",
+            [
+              limitRow("API Credits / day", "200"),
+              limitRow("Articles / credit", "10"),
+              limitRow("Rate limit", "30 credits / 15 min"),
+            ],
+          ),
+          const SizedBox(height: 24),
           Expanded(
             child: ListView.builder(
               itemCount: news.length,
@@ -188,6 +213,49 @@ class NewsList extends StatelessWidget {
                   ),
                 );
               },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget section(String title, List<Widget> children) {
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ...children,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget limitRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 14)),
+          Text(
+            value,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
             ),
           ),
         ],

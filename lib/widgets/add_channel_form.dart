@@ -50,22 +50,25 @@ class _AddChannelFormState extends State<AddChannelForm> {
             _buildLogoPreview(),
             const SizedBox(height: 16),
             _buildTextField(_logoUrlController, 'Logo URL', true, (value) {
-              if (value == null || value.isEmpty)
+              if (value == null || value.isEmpty) {
                 return 'Please enter logo URL';
+              }
               return null;
             }, _onLogoUrlChanged),
             const SizedBox(height: 12),
             _buildTextField(_channelNameController, 'Channel Name', false,
                 (value) {
-              if (value == null || value.isEmpty)
+              if (value == null || value.isEmpty) {
                 return 'Please enter a channel name';
+              }
               return null;
             }),
             const SizedBox(height: 12),
             _buildTextField(_channelUrlController, 'Channel URL (.m3u8)', false,
                 (value) {
-              if (value == null || value.isEmpty)
+              if (value == null || value.isEmpty) {
                 return 'Please enter a channel URL';
+              }
               if (!value.endsWith('.m3u8')) return 'URL must end with .m3u8';
               return null;
             }),
@@ -148,7 +151,7 @@ class _AddChannelFormState extends State<AddChannelForm> {
       Container(
         decoration: _boxDecoration(),
         child: DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           dropdownColor: const Color(0xFF192555),
           style: GoogleFonts.inter(color: Colors.white, fontSize: 13),
           decoration: _getInputDecoration(label),

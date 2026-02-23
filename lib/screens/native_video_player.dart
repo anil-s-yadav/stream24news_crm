@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stream24news_crm/screens/video_play_screen.dart';
 import 'package:video_player/video_player.dart';
 
 class NativeVideoPlayer extends StatefulWidget {

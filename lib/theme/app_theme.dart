@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Modern dark theme colors
@@ -14,36 +13,33 @@ class AppTheme {
         primary: _primaryColor,
         secondary: Colors.white,
         surface: _surfaceColor,
-        background: _backgroundColor,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: Colors.white,
-        onBackground: Colors.white,
       ),
       scaffoldBackgroundColor: _backgroundColor,
       cardColor: _cardColor,
       dividerColor: Colors.white.withOpacity(0.05),
-      textTheme:
-          GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
-        titleLarge: const TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-        ),
-        titleMedium: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-        bodyLarge: TextStyle(
-          color: Colors.white.withOpacity(0.87),
-          fontSize: 14,
-        ),
-        bodyMedium: TextStyle(
-          color: Colors.white.withOpacity(0.87),
-          fontSize: 13,
-        ),
-      ),
+      textTheme: ThemeData.dark().textTheme.copyWith(
+            titleLarge: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+            titleMedium: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            bodyLarge: TextStyle(
+              color: Colors.white.withOpacity(0.87),
+              fontSize: 14,
+            ),
+            bodyMedium: TextStyle(
+              color: Colors.white.withOpacity(0.87),
+              fontSize: 13,
+            ),
+          ),
       appBarTheme: const AppBarTheme(
         backgroundColor: _surfaceColor,
         elevation: 0,
@@ -107,7 +103,6 @@ class AppTheme {
           ),
         ),
       ),
-      useMaterial3: true,
     );
   }
 }
