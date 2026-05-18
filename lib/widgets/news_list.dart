@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stream24news_crm/services/firebase_service.dart';
 import '../model/data_service.dart';
 
@@ -24,6 +23,8 @@ class NewsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     final news = DataService.getNews();
 
     return Container(
@@ -33,11 +34,7 @@ class NewsList extends StatelessWidget {
         children: [
           Text(
             'News Feed',
-            style: GoogleFonts.inter(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
+            style: textTheme.titleLarge,
           ),
           const SizedBox(height: 24),
           Row(
@@ -162,18 +159,17 @@ class NewsList extends StatelessWidget {
                                   ),
                                   child: Text(
                                     item.category,
-                                    style: GoogleFonts.inter(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                  style: textTheme.bodySmall?.copyWith(
+                                    color: colorScheme.primary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                   ),
                                 ),
                                 const SizedBox(width: 12),
                                 Text(
                                   _getTimeAgo(item.publishedAt),
-                                  style: GoogleFonts.inter(
+                                  style: textTheme.bodySmall?.copyWith(
                                     color: Colors.white.withOpacity(0.5),
                                     fontSize: 12,
                                   ),
@@ -181,7 +177,7 @@ class NewsList extends StatelessWidget {
                                 const Spacer(),
                                 Text(
                                   item.channelName,
-                                  style: GoogleFonts.inter(
+                                  style: textTheme.bodySmall?.copyWith(
                                     color: Colors.white.withOpacity(0.7),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
@@ -192,16 +188,12 @@ class NewsList extends StatelessWidget {
                             const SizedBox(height: 12),
                             Text(
                               item.title,
-                              style: GoogleFonts.inter(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
+                              style: textTheme.titleMedium,
                             ),
                             const SizedBox(height: 8),
                             Text(
                               item.description,
-                              style: GoogleFonts.inter(
+                              style: textTheme.bodyMedium?.copyWith(
                                 color: Colors.white.withOpacity(0.7),
                                 fontSize: 14,
                               ),

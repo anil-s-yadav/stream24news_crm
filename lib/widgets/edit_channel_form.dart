@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class EditChannelForm extends StatefulWidget {
   final String userName;
@@ -35,6 +34,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Container(
       width: 280,
       decoration: BoxDecoration(
@@ -56,7 +56,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
               children: [
                 Text(
                   'Review Report',
-                  style: GoogleFonts.inter(
+                  style: textTheme.titleMedium?.copyWith(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -95,7 +95,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                         children: [
                           Text(
                             'Reported by',
-                            style: GoogleFonts.inter(
+                            style: textTheme.bodySmall?.copyWith(
                               color: Colors.white.withOpacity(0.7),
                               fontSize: 12,
                             ),
@@ -107,7 +107,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                             ),
                             title: Text(
                               widget.userName,
-                              style: GoogleFonts.inter(
+                              style: textTheme.bodyMedium?.copyWith(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -121,7 +121,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                     TextFormField(
                       initialValue: widget.channelName,
                       readOnly: true,
-                      style: GoogleFonts.inter(
+                      style: textTheme.bodyMedium?.copyWith(
                         color: Colors.white,
                         fontSize: 13,
                       ),
@@ -131,7 +131,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                     TextFormField(
                       initialValue: widget.description,
                       readOnly: true,
-                      style: GoogleFonts.inter(
+                      style: textTheme.bodyMedium?.copyWith(
                         color: Colors.white,
                         fontSize: 13,
                       ),
@@ -150,13 +150,13 @@ class _EditChannelFormState extends State<EditChannelForm> {
                       child: DropdownButtonFormField<String>(
                         initialValue: _status,
                         dropdownColor: const Color(0xFF192555),
-                        style: GoogleFonts.inter(
+                        style: textTheme.bodyMedium?.copyWith(
                           color: Colors.white,
                           fontSize: 13,
                         ),
                         decoration: InputDecoration(
                           labelText: 'Report Status',
-                          labelStyle: GoogleFonts.inter(
+                          labelStyle: textTheme.bodySmall?.copyWith(
                             color: Colors.white.withOpacity(0.7),
                             fontSize: 12,
                           ),
@@ -182,7 +182,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                             value: status,
                             child: Text(
                               _statusLabels[status] ?? status,
-                              style: GoogleFonts.inter(
+                              style: textTheme.bodyMedium?.copyWith(
                                 color: _getStatusColor(status),
                                 fontSize: 13,
                               ),
@@ -200,7 +200,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
-                      style: GoogleFonts.inter(
+                      style: textTheme.bodyMedium?.copyWith(
                         color: Colors.white,
                         fontSize: 13,
                       ),
@@ -228,7 +228,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                               ),
                               child: Text(
                                 'Cancel',
-                                style: GoogleFonts.inter(
+                                style: textTheme.labelLarge?.copyWith(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -243,7 +243,6 @@ class _EditChannelFormState extends State<EditChannelForm> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  // TODO: Implement save functionality
                                   widget.onClose();
                                 }
                               },
@@ -256,7 +255,7 @@ class _EditChannelFormState extends State<EditChannelForm> {
                               ),
                               child: Text(
                                 'Update Status',
-                                style: GoogleFonts.inter(
+                                style: textTheme.labelLarge?.copyWith(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -279,10 +278,10 @@ class _EditChannelFormState extends State<EditChannelForm> {
   InputDecoration _getInputDecoration(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: GoogleFonts.inter(
-        color: Colors.white.withOpacity(0.7),
-        fontSize: 12,
-      ),
+      labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Colors.white.withOpacity(0.7),
+            fontSize: 12,
+          ),
       filled: true,
       fillColor: const Color(0xFF192555),
       border: OutlineInputBorder(

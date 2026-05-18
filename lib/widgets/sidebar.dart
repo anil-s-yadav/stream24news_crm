@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stream24news_crm/screens/login_screen.dart';
 import 'package:stream24news_crm/services/auth_service.dart';
 
@@ -20,6 +19,7 @@ class Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     return Container(
       width: 250,
@@ -48,18 +48,18 @@ class Sidebar extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'S',
-                      style: GoogleFonts.inter(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                        style: textTheme.titleMedium?.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                     ),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Text(
                   'Stream24',
-                  style: GoogleFonts.inter(
+                  style: textTheme.titleMedium?.copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -77,12 +77,18 @@ class Sidebar extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 12, bottom: 12),
                   child: Text(
                     'MENU',
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white.withOpacity(0.4),
-                      letterSpacing: 1.2,
-                    ),
+                    style: textTheme.labelSmall?.copyWith(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white.withOpacity(0.4),
+                          letterSpacing: 1.2,
+                        ) ??
+                        TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white.withOpacity(0.4),
+                          letterSpacing: 1.2,
+                        ),
                   ),
                 ),
                 ListView.builder(
@@ -125,11 +131,10 @@ class Sidebar extends StatelessWidget {
                           ),
                           title: Text(
                             sections[index],
-                            style: GoogleFonts.inter(
+                            style: textTheme.bodyMedium?.copyWith(
                               fontSize: 14,
-                              fontWeight: isSelected
-                                  ? FontWeight.w600
-                                  : FontWeight.w500,
+                              fontWeight:
+                                  isSelected ? FontWeight.w600 : FontWeight.w500,
                               color: isSelected
                                   ? Colors.white
                                   : Colors.white.withOpacity(0.7),
@@ -171,7 +176,7 @@ class Sidebar extends StatelessWidget {
               ),
               title: Text(
                 'Log out',
-                style: GoogleFonts.inter(
+                style: textTheme.bodyMedium?.copyWith(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Colors.white.withOpacity(0.7),

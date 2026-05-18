@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stream24news_crm/model/list_data/language_data.dart';
 import 'package:stream24news_crm/model/model.dart';
 import 'package:stream24news_crm/services/firebase_service.dart';
@@ -93,8 +92,10 @@ class _AddChannelFormState extends State<AddChannelForm> {
 
   Widget _buildHeader() => Text(
         'Add Channel',
-        style: GoogleFonts.inter(
-            fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
       );
 
   Widget _buildLogoPreview() => Container(
@@ -140,7 +141,10 @@ class _AddChannelFormState extends State<AddChannelForm> {
           [void Function(String)? onChanged]) =>
       TextFormField(
         controller: controller,
-        style: GoogleFonts.inter(color: Colors.white, fontSize: 13),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Colors.white,
+              fontSize: 13,
+            ),
         decoration: _getInputDecoration(label, isLogoUrl: isLogoUrl),
         validator: validator,
         onChanged: onChanged,
@@ -153,14 +157,19 @@ class _AddChannelFormState extends State<AddChannelForm> {
         child: DropdownButtonFormField<String>(
           initialValue: value,
           dropdownColor: const Color(0xFF192555),
-          style: GoogleFonts.inter(color: Colors.white, fontSize: 13),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.white,
+                fontSize: 13,
+              ),
           decoration: _getInputDecoration(label),
           items: items
               .map((item) => DropdownMenuItem(
                   value: item,
                   child: Text(item,
-                      style: GoogleFonts.inter(
-                          color: Colors.white, fontSize: 13))))
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white,
+                            fontSize: 13,
+                          ))))
               .toList(),
           onChanged: onChanged,
         ),
@@ -197,8 +206,10 @@ class _AddChannelFormState extends State<AddChannelForm> {
             padding: EdgeInsets.zero,
           ),
           child: Text('Add Channel',
-              style:
-                  GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600)),
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  )),
         ),
       );
 
@@ -214,8 +225,10 @@ class _AddChannelFormState extends State<AddChannelForm> {
               )
             : null,
         labelText: label,
-        labelStyle: GoogleFonts.inter(
-            color: Colors.white.withOpacity(0.7), fontSize: 12),
+        labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.white.withOpacity(0.7),
+              fontSize: 12,
+            ),
         filled: true,
         fillColor: const Color(0xFF192555),
         border: OutlineInputBorder(

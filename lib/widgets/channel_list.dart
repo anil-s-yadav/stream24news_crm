@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:stream24news_crm/screens/video_play_screen.dart';
 import '../model/list_data/country_data.dart';
 import '../model/list_data/language_data.dart';
